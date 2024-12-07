@@ -1,24 +1,74 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>LOLCAST M3U8 Player</title>
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="https://unpkg.com/popper.js@1.12.3"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="home.css">
-        <script type="text/javascript" src="main.js"></script>
-    </head>
-    <body>
-        <div class="col-lg-4" id="text-box">
-            <h1 class="page-name">LOLCAST M3U8 Player</h1>
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Paste the m3u8 link here" id="m3u8-placeholder">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button" id="play-btn">Play</button>
-                </span>
-            </div>
+<head>
+    <meta charset="utf-8">
+    <title>LOLCAST M3U8 Player</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gyb3D0F8VJkPjzLkI4K3TqB9kU3D7Q2o5kLf4p9K3T4j9P8o" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7Yk2U5xgq5z5Uhtcf7ON3z7aGRj6a1AUX05SPpF4rYxK/8abtTE1PIp" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkKecw2Y7kU6v2XlnK3o2e4z9k5jC5i92vD6eejb4a2t2RkYcENB" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="home.css">
+    <script type="text/javascript" src="main.js"></script>
+</head>
+<body>
+    <div class="col-lg-4 col-md-6 col-sm-12" id="text-box">
+        <h1 class="page-name">LOLCAST M3U8 Player</h1>
+        <div class="input-group">
+            <label for="m3u8-placeholder" class="sr-only">M3U8 링크 입력</label>
+                 <input type="text" class="form-control" placeholder="Paste the M3U8 link here" id="m3u8-placeholder">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" id="play-btn" aria-label="Play M3U8 Link">Play</button>
+            </span>
         </div>
-    </body>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Play button click event
+            $('#play-btn').on('click', function () {
+                const m3u8Link = $('#m3u8-placeholder').val(); // User input
+                if (m3u8Link) {
+                    // Example: Log the link or handle the playback
+                    console.log('M3U8 Link:', m3u8Link);
+
+                    // Display alert for demonstration purposes (replace with actual player integration)
+                    alert('Playing M3U8 Link: ' + m3u8Link);
+
+                    // If you are using HLS.js or a video player, integrate the M3U8 link here
+                    // Example: Initialize video player with the m3u8 link
+                    // initializePlayer(m3u8Link); 
+                } else {
+                    alert('Please enter a valid M3U8 link.');
+                }
+            });
+        });
+
+        // Example function for initializing a player (optional, for actual integration)
+        function initializePlayer(m3u8Link) {
+            const videoElement = document.createElement('video');
+            videoElement.setAttribute('controls', '');
+            videoElement.setAttribute('autoplay', '');
+            videoElement.setAttribute('width', '100%');
+            document.body.appendChild(videoElement);
+
+            // Check if HLS.js is supported
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(m3u8Link);
+                hls.attachMedia(videoElement);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    videoElement.play();
+                });
+            } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+                // Native HLS support (Safari, etc.)
+                videoElement.src = m3u8Link;
+                videoElement.addEventListener('loadedmetadata', function () {
+                    videoElement.play();
+                });
+            } else {
+                alert('Your browser does not support HLS playback.');
+            }
+        }
+    </script>
+</body>
 </html>
